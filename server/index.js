@@ -4,6 +4,14 @@ const bodyParser = require("body-parser");
 const mysql = require("mysql2");
 const cors = require("cors");
 
+/* Em nosso projeto, utilizaremos o CORS (Cross-origin Resource Sharing) é um mecanismo usado para adicionar 
+cabeçalhos HTTP que informam aos navegadores para permitir que uma aplicação Web 
+seja executada em uma origem e acesse recursos de outra origem diferente 
+
+Também vamos utilizar o body parser que trata-se de um módulo que serve para analisar e converter os dados 
+de entrada de uma requisição para vários formatos, como o JSON. Ele permite que clientes externos enviem 
+informações para uma aplicação Node.js, feita com Javascript, e receber dados de formulários*/
+
 const db = mysql.createPool({
     host: "mysql-project-project-math.l.aivencloud.com",
     user: "avnadmin",
@@ -16,6 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+/* Método GET para realizar consultas no banco de dados (SELECT * FROM) */
 app.get("/api/get", (req, res) => {
     const sqlGet = "SELECT * FROM lembretes";
     db.query(sqlGet, (error, result) => {
@@ -23,6 +32,7 @@ app.get("/api/get", (req, res) => {
     });
 });
 
+/* O método POST irá realizar a instrução de INSERT no banco de Dados */
 app.post("/api/post", (req, res) => {
     const { descricao, datalembrete, categoria, concluido } = req.body;
     const sqlInsert =
@@ -34,6 +44,8 @@ app.post("/api/post", (req, res) => {
     });
 });
 
+/* API para remover dados da tabela do Banco de Dados
+para deletar, é necessário passar o parâmtro "id" */
 app.delete("/api/remove/:id", (req, res) => {
     const { id } = req.params;
     const sqlRemove =
@@ -45,6 +57,9 @@ app.delete("/api/remove/:id", (req, res) => {
     });
 });
 
+
+/* Método para retornar um consulta SQL, em um determinado registro
+utilizando o "id" como parâmetro*/
 app.get("/api/get/:id", (req, res) => {
     const { id } = req.params;
     const sqlGet = "SELECT * FROM lembretes WHERE id = ?";
@@ -56,6 +71,8 @@ app.get("/api/get/:id", (req, res) => {
     });
 });
 
+/* API para atualizar(UPDATE) dados da tabela do Banco de Dados
+para atualizar, é necessário passar o parêmtro "id" */
 app.put("/api/update/:id", (req, res) => {
     const { id } = req.params;
     const { descricao, datalembrete, categoria, concluido } = req.body;
