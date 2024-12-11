@@ -20,7 +20,6 @@ const AddLembrete = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  // Carregar os dados do lembrete para edição, se houver um ID
   useEffect(() => {
     if (id) {
       setIsLoading(true);
@@ -38,13 +37,11 @@ const AddLembrete = () => {
     }
   }, [id]);
 
-  // Atualizar os dados no estado com base nos inputs do formulário
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
 
-  // Enviar os dados para a API
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -74,83 +71,92 @@ const AddLembrete = () => {
       <h2>{id ? "Editar Lembrete" : "Adicionar Lembrete"}</h2>
       {isLoading && <p>Carregando...</p>}
       <form className="add-lembrete-form" onSubmit={handleSubmit}>
-        {/* Descrição */}
-        <div className="form-group">
-          <label htmlFor="descricao">Descrição do Lembrete:</label>
-          <input
-            id="descricao"
-            name="descricao"
-            type="text"
-            placeholder="Digite uma descrição para o lembrete..."
-            value={descricao}
-            onChange={handleInputChange}
-          />
+        {/* Primeira linha: Descrição e Data */}
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="descricao">Descrição do Lembrete:</label>
+            <input
+              id="descricao"
+              name="descricao"
+              type="text"
+              placeholder="Digite uma descrição para o lembrete..."
+              value={descricao}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="datalembrete">Data do Lembrete:</label>
+            <input
+              type="datetime-local"
+              id="datalembrete"
+              name="datalembrete"
+              value={datalembrete}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
 
-        {/* Data do Lembrete */}
-        <div className="form-group">
-          <label htmlFor="datalembrete">Data do Lembrete:</label>
-          <input
-            type="datetime-local"
-            id="datalembrete"
-            name="datalembrete"
-            value={datalembrete}
-            onChange={handleInputChange}
-          />
+        {/* Segunda linha: Categoria e Status */}
+        <div className="form-row">
+          <div className="form-group">
+            <label htmlFor="categoria">Categoria do Lembrete:</label>
+            <select
+              id="categoria"
+              name="categoria"
+              value={categoria}
+              onChange={handleInputChange}
+            >
+              <option value="">Selecione uma categoria...</option>
+              <option value="casa">Casa</option>
+              <option value="estudo">Estudos</option>
+              <option value="lazer">Lazer</option>
+              <option value="importante">Importante</option>
+              <option value="trabalho">Trabalho</option>
+            </select>
+          </div>
+          <div className="form-group">
+            <label htmlFor="statusL">Status do Lembrete:</label>
+            <select
+              id="statusL"
+              name="statusL"
+              value={statusL}
+              onChange={handleInputChange}
+            >
+              <option value="">Selecione o Status do Lembrete...</option>
+              <option value="P">Pendente</option>
+              <option value="C">Concluído</option>
+              <option value="E">Em andamento</option>
+              <option value="F">Congelado</option>
+            </select>
+          </div>
         </div>
 
-        {/* Categoria */}
-        <div className="form-group">
-          <label htmlFor="categoria">Categoria do Lembrete:</label>
-          <select
-            id="categoria"
-            name="categoria"
-            value={categoria}
-            onChange={handleInputChange}
-          >
-            <option value="">Selecione uma categoria...</option>
-            <option value="casa">Casa</option>
-            <option value="estudo">Estudos</option>
-            <option value="lazer">Lazer</option>
-            <option value="importante">Importante</option>
-            <option value="trabalho">Trabalho</option>
-          </select>
-        </div>
-
-        {/* Observação */}
-        <div className="form-group">
-          <label htmlFor="obs">Observação:</label>
-          <textarea
-            id="obs"
-            name="obs"
-            placeholder="Digite alguma observação..."
-            value={obs}
-            onChange={handleInputChange}
-          />
-        </div>
-
-        {/* Status do Lembrete */}
-        <div className="form-group">
-          <label htmlFor="statusL">Status do Lembrete:</label>
-          <select
-            id="statusL"
-            name="statusL"
-            value={statusL}
-            onChange={handleInputChange}
-          >
-            <option value="">Selecione o Status do Lembrete...</option>
-            <option value="P">Pendente</option>
-            <option value="C">Concluído</option>
-            <option value="E">Em andamento</option>
-            <option value="F">Congelado</option>
-          </select>
+        {/* Terceira linha: Observação */}
+        <div className="form-row">
+          <div className="form-group full-width">
+            <label htmlFor="obs">Observação:</label>
+            <textarea
+              id="obs"
+              name="obs"
+              placeholder="Digite alguma observação..."
+              value={obs}
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
 
         {/* Botões */}
         <div className="form-buttons">
-          <input type="submit" value={id ? "Atualizar" : "Salvar"} disabled={isLoading} />
+          <input
+            type="submit"
+            value={id ? "Atualizar" : "Salvar"}
+            className="btn btn-primary"
+            disabled={isLoading}
+          />
           <Link to="/">
-            <button type="button" disabled={isLoading}>Voltar</button>
+            <button type="button" className="btn btn-secondary" disabled={isLoading}>
+              Voltar
+            </button>
           </Link>
         </div>
       </form>
