@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 import './ViewLembrete.css';
 
 const ViewLembrete = () => {
     const [data, setData] = useState([]);
+    const navigate = useNavigate();  // Use the navigate hook for programmatic navigation
 
     const loadData = async () => {
-        const response = await axios.get("http://localhost:5000/api/get");
-        setData(response.data);
+        try {
+            const response = await axios.get("http://localhost:5000/api/get");
+            setData(response.data);
+        } catch (error) {
+            toast.error("Erro ao carregar dados!");
+        }
     };
 
     useEffect(() => {
@@ -18,9 +23,14 @@ const ViewLembrete = () => {
 
     const deleteLembrete = (id) => {
         if (window.confirm("Tem certeza que deseja deletar o registro?")) {
-            axios.delete(`http://localhost:5000/api/remove/${id}`);
-            toast.success("Lembrete excluído com sucesso");
-            setTimeout(() => loadData(), 500);
+            axios.delete(`http://localhost:5000/api/remove/${id}`)
+                .then(() => {
+                    toast.success("Lembrete excluído com sucesso");
+                    loadData();  // Recarrega os dados após a exclusão
+                })
+                .catch(() => {
+                    toast.error("Erro ao excluir o lembrete");
+                });
         }
     };
 
@@ -50,11 +60,16 @@ const ViewLembrete = () => {
         return `${formattedDate} ${formattedTime}`;
     };
 
+    // Função para navegar para a página de adicionar
+    const handleAddClick = () => {
+        navigate("/addLembrete");
+    };
+
     return (
         <div style={{ marginTop: "80px" }}>
-            <Link to="/addLembrete">
-                <button className="btn btn-adicionar">Adicionar</button>
-            </Link>
+            <button className="btn btn-adicionar" onClick={handleAddClick}>
+                Adicionar
+            </button>
             <table className="styled-table">
                 <thead>
                     <tr>
