@@ -31,8 +31,10 @@ const ViewLembrete = () => {
                 return "Pendente";
             case "C":
                 return "Concluído";
-            case "A":
-                return "Atrasado";
+            case "E":
+                return "Em andamento";
+            case "F":
+                return "Congelado";
             default:
                 return "Desconhecido";
         }
@@ -50,8 +52,7 @@ const ViewLembrete = () => {
                         <th style={{ textAlign: "left" }}>Descrição</th>
                         <th style={{ textAlign: "center" }}>Data</th>
                         <th style={{ textAlign: "center" }}>Categoria</th>
-                        <th style={{ textAlign: "left" }}>Observação</th>
-                        <th style={{ textAlign: "center" }}>Status</th>
+                        <th style={{ textAlign: "left" }}>Status</th>
                         <th style={{ textAlign: "center" }}>Ações</th>
                     </tr>
                 </thead>
@@ -62,7 +63,6 @@ const ViewLembrete = () => {
                             <td>{item.descricao}</td>
                             <td>{item.datalembrete}</td>
                             <td>{item.categoria}</td>
-                            <td>{item.obs}</td>
                             <td>{getStatusLabel(item.statusL)}</td>
                             <td style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
                                 <Link to={`/update/${item.id}`}>
