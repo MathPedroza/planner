@@ -1,16 +1,20 @@
+/* Estilos gerais para inputs, selects e textarea */
 input[type="text"],
-input[type="text"],
-input[type="text"],
-select {
+input[type="datetime-local"],
+select, 
+textarea {
     width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
-    display: inline-block;
+    display: block; /* Alterado para block para alinhar elementos em diferentes linhas */
     border: 1px solid #ccc;
     border-radius: 4px;
-    box-sizing: 'border-box';
+    box-sizing: border-box; /* Corrigido: sem aspas para o valor */
+    font-size: 16px; /* Para manter a consistência do tamanho do texto */
+    font-family: Arial, sans-serif; /* Garantir fonte padrão */
 }
 
+/* Estilos para botões de envio */
 input[type="submit"] {
     width: 100%;
     background-color: #4caf50;
@@ -20,8 +24,18 @@ input[type="submit"] {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
 }
 
+label, h2 {
+    padding: 10px;
+}
+input[type="submit"]:hover {
+    background-color: #45a049; /* Efeito hover para botão de envio */
+}
+
+/* Estilos para botões normais */
 input[type="button"] {
     width: 100%;
     background-color: #40453e;
@@ -31,8 +45,10 @@ input[type="button"] {
     border: none;
     border-radius: 4px;
     cursor: pointer; 
+    font-size: 16px;
+    font-family: Arial, sans-serif;
 }
 
-input[type="submit"]:hover {
-    background-color: #45a049;
+input[type="button"]:hover {
+    background-color: #363a34; /* Adicionado hover para botão normal */
 }
