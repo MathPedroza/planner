@@ -40,6 +40,18 @@ const ViewLembrete = () => {
         }
     };
 
+    // Formatação de data e hora
+    const formatDateTime = (dateTime) => {
+        if (!dateTime) return "N/A";
+        const dateObj = new Date(dateTime);
+        const formattedDate = dateObj.toLocaleDateString("pt-BR");
+        const formattedTime = dateObj.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+        return `${formattedDate} ${formattedTime}`;
+    };
+
     return (
         <div style={{ marginTop: "80px" }}>
             <Link to="/addLembrete">
@@ -58,10 +70,10 @@ const ViewLembrete = () => {
                 </thead>
                 <tbody>
                     {data.map((item, index) => (
-                        <tr key={item.id}>
+                        <tr key={item.id} className={item.statusL === "C" ? "concluido" : ""}>
                             <th scope="row">{index + 1}</th>
                             <td>{item.descricao}</td>
-                            <td>{item.datalembrete}</td>
+                            <td>{formatDateTime(item.datalembrete)}</td>
                             <td>{item.categoria}</td>
                             <td>{getStatusLabel(item.statusL)}</td>
                             <td style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
