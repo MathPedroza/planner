@@ -26,7 +26,7 @@ const AddLembrete = () => {
       axios
         .get(`http://localhost:5000/api/get/${id}`)
         .then((resp) => {
-          if (resp.data && resp.data[0]) {
+          if (resp.data && resp.data.length > 0) { // Certifique-se de que está verificando o array corretamente
             setState({ ...resp.data[0] });
           } else {
             toast.error("Lembrete não encontrado.");
@@ -36,6 +36,7 @@ const AddLembrete = () => {
         .finally(() => setIsLoading(false));
     }
   }, [id]);
+ 
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -107,11 +108,11 @@ const AddLembrete = () => {
               onChange={handleInputChange}
             >
               <option value="">Selecione uma categoria...</option>
-              <option value="casa">Casa</option>
-              <option value="estudo">Estudos</option>
-              <option value="lazer">Lazer</option>
-              <option value="importante">Importante</option>
-              <option value="trabalho">Trabalho</option>
+              <option value="Casa">Casa</option>
+              <option value="Estudos">Estudos</option>
+              <option value="Lazer">Lazer</option>
+              <option value="Importante">Importante</option>
+              <option value="Trabalho">Trabalho</option>
             </select>
           </div>
           <div className="form-group">
