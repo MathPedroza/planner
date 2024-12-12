@@ -1,8 +1,10 @@
-footer.footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 0 25px;
-    background-color: #FFF;
-    box-shadow: var(--shadow);
+/* Footer.css */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    background-color: #f8f9fa;
+    padding: 10px 0;
+    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
 }
