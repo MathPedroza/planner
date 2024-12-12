@@ -25,8 +25,36 @@ const View = () => {
     return <p>Carregando os dados...</p>; // Mensagem de carregamento enquanto os dados estão sendo buscados
   }
 
+      // Mapeamento de status
+      const getStatusLabel = (status) => {
+        switch (status) {
+            case "P":
+                return "Pendente";
+            case "C":
+                return "Concluído";
+            case "E":
+                return "Em andamento";
+            case "F":
+                return "Congelado";
+            default:
+                return "Desconhecido";
+        }
+    };
+
+    // Formatação de data e hora
+    const formatDateTime = (dateTime) => {
+        if (!dateTime) return "N/A";
+        const dateObj = new Date(dateTime);
+        const formattedDate = dateObj.toLocaleDateString("pt-BR");
+        const formattedTime = dateObj.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+        });
+        return `${formattedDate} ${formattedTime}`;
+    };
+
   return (
-    <div style={{ marginTop: "150px" }}>
+    <div style={{ marginTop: "100px" }}>
       <div className="card">
         <div className="card-header">
           <p>Detalhes do Lembrete</p>
@@ -39,7 +67,7 @@ const View = () => {
             <strong>Descrição:</strong> <span>{user.descricao || "N/A"}</span>
           </div>
           <div className="info-item">
-            <strong>Data:</strong> <span>{user.datalembrete || "N/A"}</span>
+            <strong>Data:</strong> <span>{formatDateTime(user.datalembrete) || "N/A"}</span>
           </div>
           <div className="info-item">
             <strong>Categoria:</strong> <span>{user.categoria || "N/A"}</span>
@@ -48,7 +76,7 @@ const View = () => {
             <strong>Observação:</strong> <span>{user.obs || "N/A"}</span>
           </div>
           <div className="info-item">
-            <strong>Status:</strong> <span>{user.statusL || "N/A"}</span>
+            <strong>Status:</strong> <span>{getStatusLabel(user.statusL) || "N/A"}</span>
           </div>
           <Link to="/">
             <button className="btn btn-edit">Voltar</button>
