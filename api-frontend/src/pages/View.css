@@ -19,7 +19,16 @@
 }
 
 .container {
-    padding: 4px 16px;
+    padding: 6px 16px;
     margin-bottom: 30px;
     margin-top: 15px;
 }
+
+button {
+    margin-top: 20px;
+}
+
+.info-item {
+    margin-bottom: 15px; /* Adiciona espaço entre as linhas */
+  }
+  
