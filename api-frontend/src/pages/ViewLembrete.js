@@ -98,3 +98,11 @@ const ViewLembrete = () => {
 };
 
 export default ViewLembrete;
+
+/* useState é usado para gerenciar o estado local do componente, como os dados dos lembretes (data). useEffect é usado para executar um efeito colateral,
+como carregar dados ao montar o componente.
+
+Funções Async: loadData é uma função assíncrona que busca dados da API e atualiza o estado.
+
+Manipulação de Dados: As funções deleteLembrete, getStatusLabel, e formatDateTime são usadas para gerenciar a exclusão de lembretes, mapear o status para 
+rótulos legíveis, e formatar a data e hora, respectivamente. */
