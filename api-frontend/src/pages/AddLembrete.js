@@ -22,22 +22,19 @@ const AddLembrete = () => {
 
   useEffect(() => {
     if (id) {
-      setIsLoading(true);
       axios
         .get(`http://localhost:5000/api/get/${id}`)
         .then((resp) => {
-          if (resp.data && resp.data.length > 0) { // Certifique-se de que está verificando o array corretamente
-            setState({ ...resp.data[0] });
+          if (resp.data) {  // Certifique-se de que está verificando o array corretamente
+            setState({ ...resp.data });
           } else {
             toast.error("Lembrete não encontrado.");
           }
-        })
-        .catch(() => toast.error("Erro ao carregar os dados do lembrete."))
-        .finally(() => setIsLoading(false));
+        })        
+        .catch(() => toast.error("Erro ao carregar os dados do lembrete."));
     }
   }, [id]);
  
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
