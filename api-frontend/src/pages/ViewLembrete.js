@@ -53,7 +53,7 @@ const ViewLembrete = () => {
     };
 
     return (
-        <div style={{ marginTop: "80px" }}>
+        <div className="container" style={{ marginTop: "80px" }}>
             <Link to="/addLembrete">
                 <button className="btn btn-adicionar">Adicionar</button>
             </Link>
@@ -80,6 +80,7 @@ const ViewLembrete = () => {
                                 <Link to={`/update/${item.id}`}>
                                     <button className="btn btn-edit">Editar</button>
                                 </Link>
+
                                 <button className="btn btn-delete" onClick={() => deleteLembrete(item.id)}>Deletar</button>
                                 <Link to={`/view/${item.id}`}>
                                     <button className="btn btn-view">Visualizar</button>
