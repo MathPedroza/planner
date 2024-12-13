@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import "./AddLembrete.css";
 
+// Estado inicial do lembrete
 const initialState = {
   descricao: "",
   datalembrete: "",
@@ -13,61 +14,66 @@ const initialState = {
 };
 
 const AddLembrete = () => {
+  // Estado do formulário e estado de carregamento
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
   const { descricao, datalembrete, categoria, obs, statusL } = state;
 
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams(); // Pega o ID dos parâmetros da URL
 
+  // Efeito para buscar os dados do lembrete ao carregar a página se houver um ID
   useEffect(() => {
     if (id) {
       axios
         .get(`http://localhost:5000/api/get/${id}`)
         .then((resp) => {
-          if (resp.data) {  // Certifique-se de que está verificando o array corretamente
-            setState({ ...resp.data });
+          if (resp.data) {
+            setState({ ...resp.data }); // Atualiza o estado com os dados do lembrete
           } else {
             toast.error("Lembrete não encontrado.");
           }
-        })        
+        })
         .catch(() => toast.error("Erro ao carregar os dados do lembrete."));
     }
-  }, [id]);
- 
+  }, [id]); // Executa o efeito quando o ID muda
+
+  // Manipulador de mudança dos inputs
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
 
+  // Manipulador de envio do formulário
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // Valida se todos os campos obrigatórios foram preenchidos
     if (!descricao || !datalembrete || !categoria || !statusL) {
       toast.error("Por favor, preencha todos os campos obrigatórios!");
       return;
     }
 
-    setIsLoading(true);
+    setIsLoading(true); // Inicia o estado de carregamento
 
     const request = id
-      ? axios.put(`http://localhost:5000/api/update/${id}`, state)
-      : axios.post("http://localhost:5000/api/post", state);
+      ? axios.put(`http://localhost:5000/api/update/${id}`, state) // Atualiza o lembrete se houver um ID
+      : axios.post("http://localhost:5000/api/post", state); // Cria um novo lembrete se não houver ID
 
     request
       .then(() => {
-        setState(initialState);
+        setState(initialState); // Reseta o formulário
         toast.success(id ? "Lembrete atualizado com sucesso!" : "Lembrete adicionado com sucesso!");
-        navigate("/");
+        navigate("/"); // Redireciona para a página inicial
       })
       .catch((err) => toast.error(err.response?.data || "Erro ao salvar o lembrete."))
-      .finally(() => setIsLoading(false));
+      .finally(() => setIsLoading(false)); // Encerra o estado de carregamento
   };
 
   return (
     <div className="add-lembrete-container">
       <h2>{id ? "Editar Lembrete" : "Adicionar Lembrete"}</h2>
-      {isLoading && <p>Carregando...</p>}
+      {isLoading && <p>Carregando...</p>} {/* Exibe a mensagem de carregamento */}
       <form className="add-lembrete-form" onSubmit={handleSubmit}>
         {/* Primeira linha: Descrição e Data */}
         <div className="form-row">
@@ -151,8 +157,8 @@ const AddLembrete = () => {
             className="btn btn-primary"
             disabled={isLoading}
           />
-          <Link to="/">
-            <button type="button" className="btn btn-secondary" disabled={isLoading}>
+          <Link to="/ViewLembrete">
+            <button type="button" className="btn btn-secondary" disabled={isLoading}> {/* Altere a classe para 'btn-primary' */}
               Voltar
             </button>
           </Link>
@@ -163,3 +169,9 @@ const AddLembrete = () => {
 };
 
 export default AddLembrete;
+
+/* A propriedade disabled={isLoading} é usada para desabilitar um elemento HTML, como um botão, com base no valor de um estado booleano. 
+Neste caso, isLoading é uma variável de estado que indica se uma operação está em andamento (carregando) ou não.
+
+Quando isLoading é true, o botão é desabilitado e não pode ser clicado. Quando isLoading é false, o botão é habilitado e pode ser clicado normalmente. 
+Isso é útil para evitar múltiplos cliques enquanto uma operação está sendo processada, como o envio de um formulário. */
