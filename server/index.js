@@ -1,112 +1,68 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const mysql = require("mysql2");
-const cors = require("cors");
+const { spawn } = require('child_process');
+const path = require('path');
 
-const db = mysql.createPool({
-  host: "mysql-project-project-math.l.aivencloud.com",
-  user: "avnadmin",
-  port: "22302",
-  password: "AVNS_GS3FU3g4PMXjjcF4rMg",
-  database: "planner",
-});
-
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Teste de conexão com o banco de dados
-db.getConnection((err) => {
-  if (err) {
-    console.error("Erro ao conectar ao banco de dados:", err.message);
-  } else {
-    console.log("Conexão com o banco de dados estabelecida com sucesso.");
-  }
-});
-
-// Rota para obter todos os lembretes
-app.get("/api/get", (req, res) => {
-  const sqlGet = "SELECT * FROM lembretes";
-  db.query(sqlGet, (error, result) => {
-    if (error) {
-      console.error("Erro ao buscar lembretes:", error);
-      return res.status(500).send("Erro ao buscar lembretes.");
+const services = [
+    {
+        name: 'API Gateway',
+        path: './server/gateway',
+        color: 'yellow'
+    },
+    {
+        name: 'Serviço de Lembretes',
+        path: './server/lembretes-service',
+        color: 'green'
+    },
+    {
+        name: 'Serviço de Consulta',
+        path: './server/consulta-service',
+        color: 'blue'
+    },
+    {
+        name: 'Serviço de Atualização',
+        path: './server/atualizacao-service',
+        color: 'magenta'
     }
-    res.status(200).json(result);
-  });
-});
+];
 
-// Rota para adicionar um novo lembrete
-app.post("/api/post", (req, res) => {
-  const { descricao, datalembrete, categoria, obs, statusL } = req.body;
-  const sqlInsert =
-    "INSERT INTO lembretes (descricao, datalembrete, categoria, obs, statusL) VALUES (?, ?, ?, ?, ?)";
-  db.query(sqlInsert, [descricao, datalembrete, categoria, obs, statusL], (error, result) => {
-    if (error) {
-      console.error("Erro ao adicionar lembrete:", error);
-      return res.status(500).send("Erro ao adicionar lembrete.");
-    }
-    res.status(201).send("Lembrete adicionado com sucesso.");
-  });
-});
+const colors = {
+    yellow: '\x1b[33m',
+    green: '\x1b[32m',
+    blue: '\x1b[34m',
+    magenta: '\x1b[35m',
+    reset: '\x1b[0m'
+};
 
-// Rota para remover um lembrete por ID
-app.delete("/api/remove/:id", (req, res) => {
-  const { id } = req.params;
-  const sqlRemove = "DELETE FROM lembretes WHERE id = ?";
-  db.query(sqlRemove, id, (error, result) => {
-    if (error) {
-      console.error("Erro ao remover lembrete:", error);
-      return res.status(500).send("Erro ao remover lembrete.");
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).send("Lembrete não encontrado.");
-    }
-    res.status(200).send("Lembrete removido com sucesso.");
-  });
-});
+function startService(service) {
+    const serviceProcess = spawn('npm', ['start'], {
+        cwd: path.resolve(__dirname, service.path),
+        shell: true
+    });
 
-// Rota para obter um lembrete por ID
-app.get("/api/get/:id", (req, res) => {
-  const { id } = req.params;
-  const sqlGet = "SELECT * FROM lembretes WHERE id = ?";
-  db.query(sqlGet, id, (error, result) => {
-    if (error) {
-      console.error("Erro ao buscar lembrete:", error);
-      return res.status(500).send("Erro ao buscar lembrete.");
-    }
-    if (result.length === 0) {
-      return res.status(404).send("Lembrete não encontrado.");
-    }
-    res.status(200).json(result[0]);
-  });
-});
+    console.log(`${colors[service.color]}[${service.name}] Iniciando...${colors.reset}`);
 
-// Rota para atualizar um lembrete por ID
-app.put("/api/update/:id", (req, res) => {
-  const { id } = req.params;
-  const { descricao, datalembrete, categoria, obs, statusL } = req.body;
-  const sqlUpdate =
-    "UPDATE lembretes SET descricao = ?, datalembrete = ?, categoria = ?, obs = ?, statusL = ? WHERE id = ?";
-  db.query(sqlUpdate, [descricao, datalembrete, categoria, obs, statusL, id], (error, result) => {
-    if (error) {
-      console.error("Erro ao atualizar lembrete:", error);
-      return res.status(500).send("Erro ao atualizar lembrete.");
-    }
-    if (result.affectedRows === 0) {
-      return res.status(404).send("Lembrete não encontrado.");
-    }
-    res.status(200).send("Lembrete atualizado com sucesso.");
-  });
-});
+    serviceProcess.stdout.on('data', (data) => {
+        console.log(`${colors[service.color]}[${service.name}] ${data.toString().trim()}${colors.reset}`);
+    });
 
-// Rota raiz
-app.get("/", (req, res) => {
-  res.send("API do Planner está funcionando.");
-});
+    serviceProcess.stderr.on('data', (data) => {
+        console.error(`${colors[service.color]}[${service.name}] Erro: ${data.toString().trim()}${colors.reset}`);
+    });
 
-// Inicializar o servidor
-app.listen(5000, () => {
-  console.log("Servidor rodando na porta 5000");
+    serviceProcess.on('close', (code) => {
+        console.log(`${colors[service.color]}[${service.name}] Processo finalizado com código ${code}${colors.reset}`);
+    });
+
+    return serviceProcess;
+}
+
+console.log('Iniciando todos os microserviços...');
+
+// Inicia todos os serviços
+const processes = services.map(service => startService(service));
+
+// Gerencia o encerramento gracioso
+process.on('SIGINT', () => {
+    console.log('\nEncerrando todos os serviços...');
+    processes.forEach(proc => proc.kill());
+    process.exit(0);
 });
