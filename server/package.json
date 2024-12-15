@@ -1,19 +1,18 @@
 {
-  "name": "server",
+  "name": "planner-microservices",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "preinstall": "npm install concurrently",
+    "install-all": "npm install && npm run install-services",
+    "install-services": "concurrently \"cd gateway && npm install\" \"cd lembretes-service && npm install\" \"cd consulta-service && npm install\" \"cd atualizacao-service && npm install\"",
+    "start": "concurrently \"npm run gateway\" \"npm run lembretes\" \"npm run consulta\" \"npm run atualizacao\"",
+    "gateway": "cd gateway && npm start",
+    "lembretes": "cd lembretes-service && npm start",
+    "consulta": "cd consulta-service && npm start",
+    "atualizacao": "cd atualizacao-service && npm start"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "express": "^4.21.1",
-    "mysql2": "^3.11.5",
-    "nodemon": "^3.1.7"
+    "concurrently": "^8.2.2"
   }
 }
