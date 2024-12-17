@@ -1,8 +1,8 @@
 import "./home.css";
 
-const Home = () => {
+const Home = () => { //Arrow Function.
   return (
-    <div className="home-container">
+    <div className="home-container"> {/* A div principal tem a classe home-container para aplicar estilos específicos do componente.*/}
       <h1 className="display-4">Bem Vindo!</h1>
       <hr />
       <p className="mb-0">
@@ -10,8 +10,8 @@ const Home = () => {
       </p>
       <div className="tech-images">
         <img
-          src="../assets/images/HTML5_logo.png" 
-          alt="HTML"
+          src="../assets/images/HTML5_logo.png"  //src: Define o caminho para a imagem armazenada localmente.
+          alt="HTML" // Texto alternativo para acessibilidade e caso a imagem não carregue.
           className="tech-icon"
         />
         <img
