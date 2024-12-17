@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState } from "react"; // Hook do React que permite o gerenciamento de estado no componente funcional
 import './Sobre.css';
 
-export default function Sobre() {
-  const [pessoas, setPessoas] = useState([
+export default function Sobre() { 
+  const [pessoas, setPessoas] = useState([ // Um array de objetos que contém informações sobre os desenvolvedores (nome, cargo e ID).
     {
       name: "João Victor Maraia Franco",
       worker: "Desenvolvedor Pleno React",
@@ -25,6 +25,7 @@ export default function Sobre() {
     },
   ]);
 
+  // Renderização do Componente
   return (
     <div>
       <div className="sobre-projeto" style={styles.container}>
@@ -45,7 +46,7 @@ export default function Sobre() {
       <div style={styles.desenvolvedoresContainer}>
         <h3 style={styles.desenvolvedoresTitle}>Desenvolvedores</h3>
         <div className="sobre">
-          {pessoas.map((pessoa) => (
+          {pessoas.map((pessoa) => ( // A função pessoas.map() percorre o array pessoas e retorna um bloco JSX para cada objeto
             <div className="pessoa-preview" key={pessoa.id} style={styles.pessoa}>
               <h2 style={styles.nome}>{pessoa.name}</h2>
               <p style={styles.cargo}>Cargo: {pessoa.worker}</p>
@@ -57,6 +58,7 @@ export default function Sobre() {
   );
 }
 
+//Objeto styles contendo as propriedades de estilo aplicadas no JSX:
 const styles = {
   container: {
     padding: "10px",
