@@ -1,4 +1,12 @@
-select * from lembretes;
+CREATE TABLE lembretes (
+	id INT NOT NULL AUTO_INCREMENT,
+    descricao VARCHAR(255),
+    datalembrete TIMESTAMP,
+    categoria VARCHAR (30),
+    obs TEXT,
+    statusL CHAR (1),
+    PRIMARY KEY (id)
+)
 
 insert into lembretes (descricao, datalembrete, categoria, obs, statusL) 
 VALUES ('Apresentação trabalho Pós Graduação', '2024-12-16 19:30:00', 'Estudos', 'Apresentação em equipe!', 'P');
@@ -30,6 +38,6 @@ VALUES ('Treinamento de equipe', '2024-11-19 13:30:00', 'Trabalho', 'Focar em no
 insert into lembretes (descricao, datalembrete, categoria, obs, statusL) 
 VALUES ('Planejamento de metas 2025', '2024-12-26 11:00:00', 'Pessoal', 'Definir objetivos para o ano.', 'F');
 
-select * from usuarios;
+SELECT * FROM lembretes;
 
 ALTER TABLE lembretes AUTO_INCREMENT =1;
