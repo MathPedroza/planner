@@ -4,12 +4,12 @@ import { toast } from "react-toastify"; // Importa o toast para notificações
 import axios from "axios"; // Importa o axios para fazer requisições HTTP
 import './ViewLembrete.css'; // Importa o arquivo CSS para estilização
 
-const ViewLembrete = () => {
+const ViewLembrete = () => { // Arrow Function
     const [data, setData] = useState([]); // Estado para armazenar os dados dos lembretes
 
     // Função para carregar os dados dos lembretes
     const loadData = async () => {
-        const response = await axios.get("http://localhost:5000/api/get"); // Faz uma requisição GET para obter os lembretes
+        const response = await axios.get("http://localhost:25568/api/get"); // Faz uma requisição GET para obter os lembretes
         setData(response.data); // Atualiza o estado com os dados recebidos
     };
 
@@ -19,16 +19,16 @@ const ViewLembrete = () => {
     }, []); // O array vazio [] significa que este efeito roda apenas uma vez, quando o componente é montado
 
     // Função para deletar um lembrete
-    const deleteLembrete = (id) => {
+    const deleteLembrete = (id) => { // Arrow function com parâmetro id
         if (window.confirm("Tem certeza que deseja deletar o registro?")) { // Confirmação antes de deletar
-            axios.delete(`http://localhost:5000/api/remove/${id}`); // Faz uma requisição DELETE para remover o lembrete
+            axios.delete(`http://localhost:25567/api/remove/${id}`); // Faz uma requisição DELETE para remover o lembrete
             toast.success("Lembrete excluído com sucesso"); // Exibe uma notificação de sucesso
             setTimeout(() => loadData(), 500); // Recarrega os dados após um pequeno atraso
         }
     };
 
     // Função para mapear o status do lembrete para um rótulo legível
-    const getStatusLabel = (status) => {
+    const getStatusLabel = (status) => { // parâmetro "status"
         switch (status) {
             case "P":
                 return "Pendente";
@@ -62,7 +62,7 @@ const ViewLembrete = () => {
             </Link>
             <table className="styled-table">
                 <thead>
-                    <tr>
+                    <tr> {/* Títulos da Tabela*/}
                         <th style={{ textAlign: "left" }}>Id</th>
                         <th style={{ textAlign: "left" }}>Descrição</th>
                         <th style={{ textAlign: "center" }}>Data</th>
@@ -73,7 +73,7 @@ const ViewLembrete = () => {
                 </thead>
                 <tbody>
                     {data.map((item, index) => ( // Mapeia cada lembrete para uma linha da tabela
-                        <tr key={item.id} className={item.statusL === "C" ? "concluido" : ""}> {/* Aplica a classe "concluido" se o status for "C" */}
+                        <tr key={item.id} className={item.statusL.trim().toUpperCase() === "C" ? "concluido" : ""}> {/* Aplica a classe "concluido" se o status for "C" */}
                             <th scope="row">{index + 1}</th> {/* Índice do lembrete */}
                             <td>{item.descricao}</td> {/* Descrição do lembrete */}
                             <td>{formatDateTime(item.datalembrete)}</td> {/* Data do lembrete formatada */}
@@ -98,6 +98,7 @@ const ViewLembrete = () => {
 };
 
 export default ViewLembrete;
+
 
 /* useState é usado para gerenciar o estado local do componente, como os dados dos lembretes (data). useEffect é usado para executar um efeito colateral,
 como carregar dados ao montar o componente.
