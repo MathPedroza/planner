@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams, Link } from "react-router-dom";
-import axios from "axios";
-import { toast } from "react-toastify";
+import React, { useState, useEffect } from "react"; // Hooks para gerenciar estado local e efeitos colaterais
+import { useNavigate, useParams, Link } from "react-router-dom"; // Hooks do react-router-dom usados para navegar entre páginas e acessar parâmetros da URL.
+import axios from "axios"; //Biblioteca para realizar requisições HTTP.
+import { toast } from "react-toastify"; //Biblioteca para exibir notificações
 import "./AddLembrete.css";
 
-// Estado inicial do lembrete
+// Estado inicial do lembrete - define o valor padrão para os campos do formulário
 const initialState = {
   descricao: "",
   datalembrete: "",
@@ -16,17 +16,17 @@ const initialState = {
 const AddLembrete = () => {
   // Estado do formulário e estado de carregamento
   const [state, setState] = useState(initialState);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Estado booleano que indica se a operação (envio ou carregamento) está em andamento.
   const { descricao, datalembrete, categoria, obs, statusL } = state;
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Usado para redirecionar o usuário para outra página.
   const { id } = useParams(); // Pega o ID dos parâmetros da URL
 
   // Efeito para buscar os dados do lembrete ao carregar a página se houver um ID
   useEffect(() => {
     if (id) {
       axios
-        .get(`http://localhost:5000/api/get/${id}`)
+        .get(`http://localhost:25568/api/get/${id}`)
         .then((resp) => {
           if (resp.data) {
             setState({ ...resp.data }); // Atualiza o estado com os dados do lembrete
@@ -39,8 +39,8 @@ const AddLembrete = () => {
   }, [id]); // Executa o efeito quando o ID muda
 
   // Manipulador de mudança dos inputs
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e) => { //  é acionado sempre que um campo do formulário é alterado
+    const { name, value } = e.target; // identifica qual campo foi modificado, e value atualiza o valor correspondente no estado
     setState({ ...state, [name]: value });
   };
 
@@ -57,8 +57,8 @@ const AddLembrete = () => {
     setIsLoading(true); // Inicia o estado de carregamento
 
     const request = id
-      ? axios.put(`http://localhost:5000/api/update/${id}`, state) // Atualiza o lembrete se houver um ID
-      : axios.post("http://localhost:5000/api/post", state); // Cria um novo lembrete se não houver ID
+      ? axios.put(`http://localhost:25567/api/update/${id}`, state) // Atualiza o lembrete se houver um ID
+      : axios.post("http://localhost:25566/api/post", state); // Cria um novo lembrete se não houver ID
 
     request
       .then(() => {
@@ -70,7 +70,7 @@ const AddLembrete = () => {
       .finally(() => setIsLoading(false)); // Encerra o estado de carregamento
   };
 
-  return (
+  return ( //Estrutura JSX do Formulário
     <div className="add-lembrete-container">
       <h2>{id ? "Editar Lembrete" : "Adicionar Lembrete"}</h2>
       {isLoading && <p>Carregando...</p>} {/* Exibe a mensagem de carregamento */}
@@ -116,6 +116,9 @@ const AddLembrete = () => {
               <option value="Lazer">Lazer</option>
               <option value="Importante">Importante</option>
               <option value="Trabalho">Trabalho</option>
+              <option value="Pessoal">Pessoal</option>
+              <option value="Saude">Saúde</option>
+              <option value="Financeiro">Financeiro</option>
             </select>
           </div>
           <div className="form-group">
@@ -158,7 +161,7 @@ const AddLembrete = () => {
             disabled={isLoading}
           />
           <Link to="/ViewLembrete">
-            <button type="button" className="btn btn-secondary" disabled={isLoading}> {/* Altere a classe para 'btn-primary' */}
+            <button type="button" className="btn btn-secondary" disabled={isLoading}> 
               Voltar
             </button>
           </Link>
