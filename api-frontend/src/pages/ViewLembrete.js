@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"; // Importa os hooks useState
 import { Link } from "react-router-dom"; // Importa o componente Link para navegação
 import { toast } from "react-toastify"; // Importa o toast para notificações
 import axios from "axios"; // Importa o axios para fazer requisições HTTP
-import './ViewLembrete.css'; // Importa o arquivo CSS para estilização
+import '../styles/ViewLembrete.css'; // Importa o arquivo CSS para estilização
 
 const ViewLembrete = () => { // Arrow Function
     const [data, setData] = useState([]); // Estado para armazenar os dados dos lembretes
@@ -56,7 +56,7 @@ const ViewLembrete = () => { // Arrow Function
     };
 
     return (
-        <div className="container" style={{ marginTop: "80px" }}>
+        <div className="container">
             <Link to="/addLembrete">
                 <button className="btn btn-adicionar">Adicionar</button> {/* Botão para adicionar um novo lembrete */}
             </Link>
@@ -81,12 +81,23 @@ const ViewLembrete = () => { // Arrow Function
                             <td>{getStatusLabel(item.statusL)}</td> {/* Status do lembrete */}
                             <td style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
                                 <Link to={`/update/${item.id}`}>
-                                    <button className="btn btn-edit">Editar</button> {/* Botão para editar o lembrete */}
+                                    <button className="btn btn-edit" title="Editar">
+                                        <i className="fas fa-edit"></i>
+                                    </button>
                                 </Link>
 
-                                <button className="btn btn-delete" onClick={() => deleteLembrete(item.id)}>Deletar</button> {/* Botão para deletar o lembrete */}
+                                <button
+                                    className="btn btn-delete"
+                                    title="Deletar"
+                                    onClick={() => deleteLembrete(item.id)}
+                                >
+                                    <i className="fas fa-trash"></i>
+                                </button>
+
                                 <Link to={`/view/${item.id}`}>
-                                    <button className="btn btn-view">Visualizar</button> {/* Botão para visualizar o lembrete */}
+                                    <button className="btn btn-view" title="Visualizar">
+                                        <i className="fas fa-eye"></i>
+                                    </button>
                                 </Link>
                             </td>
                         </tr>
