@@ -1,0 +1,39 @@
+.display-4 {
+    padding-top: 20px;
+    padding-left: 15px;
+
+}
+
+.home-container {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .tech-images {
+    margin-top: 20px;
+  }
+  
+  .tech-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 10px;
+    transition: transform 0.3s ease;
+  }
+  
+  .tech-icon:hover {
+    transform: scale(1.2);
+  }
+  
+  .home-container {
+    text-align: center; /* Centraliza o conteúdo do texto */
+  }
+  
+  .center-image {
+    display: block;
+    margin: 20px auto; /* Centraliza a imagem horizontalmente e adiciona margem */
+    max-width: 100%; /* Garante que a imagem não ultrapasse a largura do contêiner */
+    height: auto; /* Mantém a proporção da imagem */
+    width: 600px;
+    height: 500px;
+  }
+  
